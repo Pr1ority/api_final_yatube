@@ -31,7 +31,7 @@ class CommentViewSet(viewsets.ModelViewSet):
                           IsAuthorOrReadOnlyPermission,)
 
     def get_post(self):
-        post_id = self.kwargs['post_id']
+        post_id = self.kwargs.get('post_id')
         return get_object_or_404(Post, id=post_id)
 
     def get_queryset(self):
