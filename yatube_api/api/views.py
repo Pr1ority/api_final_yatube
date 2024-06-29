@@ -1,6 +1,6 @@
 from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
-from django.core.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 
 from posts.models import Post, Comment, Group, Follow
