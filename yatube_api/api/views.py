@@ -1,5 +1,6 @@
 from rest_framework import filters, permissions, viewsets
 from rest_framework.pagination import LimitOffsetPagination
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 
 from posts.models import Post, Comment, Group, Follow
@@ -58,4 +59,8 @@ class FollowViewSet(viewsets.ModelViewSet):
         return Follow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+        user = self.request.user
+        following = serializer.validated_data['following']
+        if Follow.objects.filter(user=user, following=following).exists():
+            raise ValidationError("Вы уже подписаны на этого пользователя")
+        serializer.save(user=user)
