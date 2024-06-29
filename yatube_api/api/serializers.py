@@ -28,7 +28,7 @@ class GroupSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Group
-        fields = ('id', 'title', 'slug', 'description', 'posts')
+        fields = ('id', 'title', 'slug', 'description')
 
 
 class FollowSerializer(serializers.ModelSerializer):
@@ -37,3 +37,8 @@ class FollowSerializer(serializers.ModelSerializer):
         model = Follow
         fields = ('id', 'user', 'following')
         read_only_fields = ['user']
+
+    def validate_following(self, value):
+        if self.context['request'].user == value:
+            raise serializers.ValidationError("Вы не можете отслеживать себя")
+        return value

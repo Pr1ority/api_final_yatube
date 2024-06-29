@@ -52,14 +52,11 @@ class GroupViewSet(viewsets.ReadOnlyModelViewSet):
 class FollowViewSet(viewsets.ModelViewSet):
     serializer_class = FollowSerializer
     permission_classes = (permissions.IsAuthenticated,)
-    filter_backends = (filters.SearchFilter)
-    search_fields = ('following',)
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('following__username',)
 
     def get_queryset(self):
         return Follow.objects.filter(user=self.request.user)
 
     def perform_create(self, serializer):
-        following_user = serializer.validated_data['following']
-        if self.request.user == following_user:
-            raise ValidationError("Вы не можете отслеживать себя")
         serializer.save(user=self.request.user)
