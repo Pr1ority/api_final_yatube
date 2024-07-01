@@ -1,6 +1,6 @@
-from rest_framework import filters, permissions, viewsets, mixins, status
+from rest_framework import filters, permissions, viewsets, mixins
+from rest_framework.exceptions import ValidationError 
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 from posts.models import Post, Group, User, Follow
@@ -57,10 +57,9 @@ class FollowViewSet(mixins.ListModelMixin,
 
     def perform_create(self, serializer):
         user = self.request.user
-        following = serializer.validated_data['following']
+        following = serializer.validated_data['following'] 
 
-        if Follow.objects.filter(user=user, following=following).exists():
-            return Response({"detail":
-                             "Вы уже подписаны на этого пользователя."},
-                            status=status.HTTP_400_BAD_REQUEST)
+        if Follow.objects.filter(user=user, following=following).exists(): 
+
+            raise ValidationError("Вы уже подписаны на этого пользователя") 
         serializer.save(user=user)
