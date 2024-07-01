@@ -8,7 +8,7 @@ User = get_user_model()
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = SlugRelatedField(slug_field='username', read_only=True)
+    author = SlugRelatedField(slug_field='username')
 
     class Meta:
         fields = '__all__'
