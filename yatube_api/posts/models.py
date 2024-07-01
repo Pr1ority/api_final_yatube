@@ -25,6 +25,9 @@ class Post(models.Model):
         related_name='posts', blank=True, null=True
     )
 
+    class Meta:
+        ordering = ['-pub_date']
+
     def __str__(self):
         return self.text
 
@@ -46,7 +49,9 @@ class Follow(models.Model):
         User, on_delete=models.CASCADE, related_name='following')
 
     class Meta:
-        unique_together = ('user', 'following')
+        constraints = [
+            models.UniqueConstraint(fields=['follower', 'following'])
+        ]
 
     def __str__(self):
         return f'{self.user} отслеживает {self.following}'
