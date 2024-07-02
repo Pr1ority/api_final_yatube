@@ -9,7 +9,7 @@ from .permissions import IsAuthorOrReadOnlyPermission
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    queryset = Post.objects.all().order_by('-pub_date')
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsAuthorOrReadOnlyPermission,)
