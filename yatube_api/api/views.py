@@ -52,14 +52,8 @@ class FollowViewSet(mixins.ListModelMixin,
     search_fields = ('following__username',)
 
     def get_queryset(self):
-        user = get_object_or_404(User, username=self.request.user.username)
-        return user.follower.all()
+        return self.request.user.follower.all()
 
     def perform_create(self, serializer):
         user = self.request.user
-        following = serializer.validated_data['following']
-
-        if Follow.objects.filter(user=user, following=following).exists():
-
-            raise ValidationError("Вы уже подписаны на этого пользователя")
         serializer.save(user=user)
