@@ -9,13 +9,11 @@ from .permissions import IsAuthorOrReadOnlyPermission
 
 
 class PostViewSet(viewsets.ModelViewSet):
+    queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsAuthorOrReadOnlyPermission,)
     pagination_class = LimitOffsetPagination
-
-    def get_queryset(self):
-        return Post.objects.all().order_by('-pub_date')
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
